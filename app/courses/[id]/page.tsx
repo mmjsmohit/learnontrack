@@ -50,7 +50,7 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <CourseItemsList courseItems={courseItems || []} />
+              <CourseItemsList courseItems={courseItems || []} courseId={id} />
             </div>
             <div className="lg:col-span-1">
               <CourseProgress courseItems={courseItems || []} />

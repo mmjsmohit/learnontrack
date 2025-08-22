@@ -41,9 +41,9 @@ export function CourseHeader({ course }: CourseHeaderProps) {
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">{course.title}</h1>
-            <Badge variant="secondary" className="flex items-center gap-1">
+          <div className="mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{course.title}</h1>
+            <Badge variant="secondary" className="flex items-center gap-1 w-fit">
               {getSourceIcon(course.source_type)}
               {getSourceLabel(course.source_type)}
             </Badge>
