@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { CurrentUserAvatar } from "@/components/current-user-avatar"
 import { Plus, User, LogOut, BookOpen } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -27,15 +27,6 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
     await supabase.auth.signOut()
     router.push("/auth/login")
   }
-
-  const userInitials =
-    user.user_metadata?.full_name
-      ?.split(" ")
-      .map((n: string) => n[0])
-      .join("")
-      .toUpperCase() ||
-    user.email?.[0]?.toUpperCase() ||
-    "U"
 
   return (
     <header className="bg-white border-b border-gray-200">
@@ -58,10 +49,8 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-blue-100 text-blue-600">{userInitials}</AvatarFallback>
-                  </Avatar>
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
+                  <CurrentUserAvatar />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56" align="end" forceMount>

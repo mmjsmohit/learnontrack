@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { BookOpen, Play, FileText, Settings, Download } from "lucide-react"
 import Link from "next/link"
+import { CurrentUserAvatar } from "@/components/current-user-avatar"
 
 interface CourseHeaderProps {
   course: {
@@ -77,6 +78,9 @@ export function CourseHeader({ course }: CourseHeaderProps) {
             <Settings className="w-4 h-4 mr-2" />
             Settings
           </Button>
+          <div className="ml-4">
+            <CurrentUserAvatar />
+          </div>
         </div>
       </div>
     </div>

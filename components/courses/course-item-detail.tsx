@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProgressTracker } from "@/components/progress/progress-tracker"
 import { BookOpen, Play, FileText, ClipboardList, HelpCircle, Clock, ExternalLink } from "lucide-react"
+import { extractVideoId } from "@/lib/youtube/youtube-parser"
 
 interface CourseItemDetailProps {
   courseItem: {
@@ -26,6 +27,15 @@ interface CourseItemDetailProps {
 }
 
 export function CourseItemDetail({ courseItem }: CourseItemDetailProps) {
+  const isYouTubeUrl = (url: string): boolean => {
+    return extractVideoId(url) !== null
+  }
+
+  const getYouTubeEmbedUrl = (url: string): string | null => {
+    const videoId = extractVideoId(url)
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : null
+  }
+
   const getItemIcon = (type: string) => {
     switch (type) {
       case "video":
@@ -77,6 +87,22 @@ export function CourseItemDetail({ courseItem }: CourseItemDetailProps) {
           </div>
         </CardHeader>
         <CardContent>
+          {/* YouTube Video Embed */}
+          {courseItem.item_type === "video" && courseItem.content_url && isYouTubeUrl(courseItem.content_url) && (
+            <div className="mb-6">
+              <div className="aspect-video w-full max-w-4xl mx-auto rounded-lg overflow-hidden bg-black">
+                <iframe
+                  src={getYouTubeEmbedUrl(courseItem.content_url)!}
+                  title={courseItem.title}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4 text-sm text-gray-500">
               {courseItem.duration_minutes && (

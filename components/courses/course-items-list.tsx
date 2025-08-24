@@ -7,6 +7,7 @@ import { ProgressTracker } from "@/components/progress/progress-tracker"
 import { InlineItemForm } from "@/components/courses/inline-item-form"
 import { BookOpen, Play, FileText, ClipboardList, HelpCircle, Clock, ExternalLink, Eye } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
 
 interface CourseItem {
   id: string
@@ -30,6 +31,8 @@ interface CourseItemsListProps {
 }
 
 export function CourseItemsList({ courseItems, courseId }: CourseItemsListProps) {
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set())
+
   const getItemIcon = (type: string) => {
     switch (type) {
       case "video":
@@ -83,6 +86,7 @@ export function CourseItemsList({ courseItems, courseId }: CourseItemsListProps)
             const progress = item.user_progress?.[0]
             const status = progress?.status || "not_started"
             const progressPercentage = progress?.progress_percentage || 0
+            const isExpanded = expandedIds.has(item.id)
 
             return (
               <Card key={item.id} className="border-l-4 border-l-blue-600">
@@ -92,7 +96,28 @@ export function CourseItemsList({ courseItems, courseId }: CourseItemsListProps)
                       <div className="mt-1">{getItemIcon(item.item_type)}</div>
                       <div className="flex-1">
                         <CardTitle className="text-lg font-medium text-gray-900">{item.title}</CardTitle>
-                        {item.description && <p className="text-sm text-gray-600 mt-1">{item.description}</p>}
+                        {item.description && (
+                          <div className="mt-1">
+                            <p className={`text-sm text-gray-600 ${isExpanded ? "" : "line-clamp-2"}`}>{item.description}</p>
+                            {item.description.length > 120 && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="mt-1 h-auto p-0 text-blue-600 hover:text-blue-800 hover:bg-transparent"
+                                onClick={() =>
+                                  setExpandedIds((prev) => {
+                                    const next = new Set(prev)
+                                    if (next.has(item.id)) next.delete(item.id)
+                                    else next.add(item.id)
+                                    return next
+                                  })
+                                }
+                              >
+                                {isExpanded ? "Show less" : "Read more"}
+                              </Button>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <Badge className={getItemTypeColor(item.item_type)}>{item.item_type}</Badge>
