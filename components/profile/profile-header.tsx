@@ -2,6 +2,7 @@
 
 import { CurrentUserAvatar } from "@/components/current-user-avatar"
 import { Button } from "@/components/ui/button"
+import { BackButton } from "@/components/ui/back-button"
 import { Edit } from "lucide-react"
 import type { User as SupabaseUser } from "@supabase/supabase-js"
 
@@ -19,6 +20,9 @@ export function ProfileHeader({ user, profile }: ProfileHeaderProps) {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="mb-4">
+        <BackButton />
+      </div>
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-4">
           <CurrentUserAvatar className="h-20 w-20" />

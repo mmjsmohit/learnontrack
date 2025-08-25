@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { DashboardHeader } from "@/components/dashboard/dashboard-header"
+import { SidebarLayout } from "@/components/sidebar-layout"
 import { CreateCourseForm } from "@/components/courses/create-course-form"
 
 export default async function NewCoursePage() {
@@ -23,9 +23,8 @@ export default async function NewCoursePage() {
   console.log("[v0] NewCoursePage: User authenticated, rendering page")
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardHeader user={data.user} />
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <SidebarLayout>
+      <div className="py-8">
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Add New Course</h1>
@@ -33,7 +32,7 @@ export default async function NewCoursePage() {
           </div>
           <CreateCourseForm />
         </div>
-      </main>
-    </div>
+      </div>
+    </SidebarLayout>
   )
 }
