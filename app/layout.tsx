@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "CourseTracker - AI-Powered Learning Management",
+  title: "LearnOnTrack - AI-Powered Learning Management",
   description: "Track your online courses with AI-powered content parsing and progress tracking",
   generator: "v0.app",
 }

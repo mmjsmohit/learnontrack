@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { SidebarLayout } from "@/components/sidebar-layout"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { CourseHeader } from "@/components/courses/course-header"
 import { CourseItemsList } from "@/components/courses/course-items-list"
 import { CourseProgress } from "@/components/courses/course-progress"
@@ -42,19 +42,22 @@ export default async function CoursePage({ params }: CoursePageProps) {
     .order("order_index")
 
   return (
-    <SidebarLayout>
-      <div className="space-y-8">
-        <CourseHeader course={course} />
+    <div className="min-h-screen bg-gray-50">
+      <DashboardHeader user={data.user} />
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-8">
+          <CourseHeader course={course} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <CourseItemsList courseItems={courseItems || []} courseId={id} />
-          </div>
-          <div className="lg:col-span-1">
-            <CourseProgress courseItems={courseItems || []} />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <CourseItemsList courseItems={courseItems || []} courseId={id} />
+            </div>
+            <div className="lg:col-span-1">
+              <CourseProgress courseItems={courseItems || []} />
+            </div>
           </div>
         </div>
-      </div>
-    </SidebarLayout>
+      </main>
+    </div>
   )
 }

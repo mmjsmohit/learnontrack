@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
-import { SidebarLayout } from "@/components/sidebar-layout"
+import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { EnhancedContentParser } from "@/components/courses/enhanced-content-parser"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -27,8 +27,9 @@ export default async function ParsePage({ params }: ParsePageProps) {
   }
 
   return (
-    <SidebarLayout>
-      <div className="py-8">
+    <div className="min-h-screen bg-gray-50">
+      <DashboardHeader user={data.user} />
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-6">
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm" asChild>
@@ -54,7 +55,7 @@ export default async function ParsePage({ params }: ParsePageProps) {
             }}
           />
         </div>
-      </div>
-    </SidebarLayout>
+      </main>
+    </div>
   )
 }

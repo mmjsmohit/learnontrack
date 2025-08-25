@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge"
 import { BookOpen, Play, FileText, Settings, Download } from "lucide-react"
 import Link from "next/link"
 import { CurrentUserAvatar } from "@/components/current-user-avatar"
-import { BackButton } from "@/components/ui/back-button"
 
 interface CourseHeaderProps {
   course: {
@@ -43,9 +42,6 @@ export function CourseHeader({ course }: CourseHeaderProps) {
     <div className="bg-white rounded-lg shadow-sm border p-6">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="mb-4">
-            <BackButton className="mb-4" />
-          </div>
           <div className="mb-2">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{course.title}</h1>
             <Badge variant="secondary" className="flex items-center gap-1 w-fit">
