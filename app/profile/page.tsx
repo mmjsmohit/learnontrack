@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-import { SidebarLayout } from "@/components/sidebar-layout"
 import { ProfileHeader } from "@/components/profile/profile-header"
 import { ProfileStats } from "@/components/profile/profile-stats"
 import { ProfileInfo } from "@/components/profile/profile-info"
@@ -59,8 +58,8 @@ export default async function ProfilePage() {
   const overallProgress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0
 
   return (
-    <SidebarLayout>
-      <div className="py-8">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <ProfileHeader user={user} profile={profile} />
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -79,6 +78,6 @@ export default async function ProfilePage() {
           </div>
         </div>
       </div>
-    </SidebarLayout>
+    </div>
   )
 }
