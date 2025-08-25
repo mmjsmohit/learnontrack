@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { CurrentUserAvatar } from "@/components/current-user-avatar"
+import { BackButton } from "@/components/ui/back-button"
 import { Plus, User, LogOut, BookOpen } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -33,6 +34,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-4">
+            <BackButton />
             <div className="flex items-center space-x-2">
               <BookOpen className="w-8 h-8 text-blue-600" />
               <span className="text-xl font-bold text-gray-900">CourseTracker</span>
