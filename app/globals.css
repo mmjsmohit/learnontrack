@@ -138,67 +138,49 @@
   body {
     margin: 0;
     padding: 0;
-    font-size: 14px;
-    line-height: 1.4;
-    overflow-x: hidden;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   
-  /* Ensure proper scaling in small PiP windows */
   .pip-container {
-    min-height: 100vh;
-    padding: 12px;
+    height: 100vh;
+    padding: 16px;
     box-sizing: border-box;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
-  
-  /* Adjust component sizes for PiP */
-  .pip-container h1,
-  .pip-container h2,
-  .pip-container h3 {
-    font-size: 0.9em;
-    line-height: 1.3;
-  }
-  
-  .pip-container .text-xs {
-    font-size: 11px;
-  }
-  
-  .pip-container .text-sm {
-    font-size: 12px;
-  }
-  
-  /* Make buttons more touch-friendly in PiP */
-  .pip-container button {
-    min-height: 32px;
-    padding: 6px 12px;
-  }
-  
-  /* Ensure cards are compact */
-  .pip-container .card {
-    padding: 8px;
-  }
-  
-  /* Hide elements that should only show in PiP */
-  .pip-only-button {
-    display: block !important;
-  }
-}
 
-/* Hide PiP-only elements in normal view */
-.pip-only-button {
-  display: none;
-}
+  /* Optimize text sizes for small PiP window */
+  h1 {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+  }
 
-/* Ensure proper text truncation */
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
+  p {
+    font-size: 12px !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
+  }
 
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  button {
+    font-size: 12px !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  /* Hide scrollbars in PiP */
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  
+  * {
+    scrollbar-width: none;
+  }
 }

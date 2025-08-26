@@ -1,8 +1,13 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ProgressTracker } from "@/components/progress/progress-tracker"
+import { EnhancedProgressTracker } from "@/components/progress/enhanced-progress-tracker"
+import { Button } from "@/components/ui/button"
 import { BookOpen, Play, FileText, ClipboardList, HelpCircle, Clock, ExternalLink } from "lucide-react"
 import { extractVideoId } from "@/lib/youtube/youtube-parser"
+import { usePictureInPicture } from "@/hooks/use-picture-in-picture"
+import { useState, useEffect } from "react"
 
 interface CourseItemDetailProps {
   courseItem: {
@@ -27,6 +32,11 @@ interface CourseItemDetailProps {
 }
 
 export function CourseItemDetail({ courseItem }: CourseItemDetailProps) {
+  const [currentStatus, setCurrentStatus] = useState(courseItem.user_progress?.[0]?.status || "not_started")
+  const [currentProgress, setCurrentProgress] = useState(courseItem.user_progress?.[0]?.progress_percentage || 0)
+  
+  const { isSupported: isPiPSupported, openPiP } = usePictureInPicture()
+
   const isYouTubeUrl = (url: string): boolean => {
     return extractVideoId(url) !== null
   }
@@ -35,6 +45,83 @@ export function CourseItemDetail({ courseItem }: CourseItemDetailProps) {
     const videoId = extractVideoId(url)
     return videoId ? `https://www.youtube.com/embed/${videoId}` : null
   }
+
+  const handleProgressUpdate = (status: string, progress: number) => {
+    setCurrentStatus(status)
+    setCurrentProgress(progress)
+  }
+
+  const handleOpenContent = async (url: string) => {
+    // If user is in progress and PiP is supported, open PiP before navigating
+    if (currentStatus === "in_progress" && isPiPSupported) {
+      try {
+        await openPiP({
+          id: courseItem.id,
+          title: courseItem.title,
+          courseTitle: courseItem.courses?.title,
+          status: currentStatus as any,
+          progress: currentProgress,
+          courseId: courseItem.courses?.id || "",
+          itemId: courseItem.id
+        })
+        
+        // Small delay to ensure PiP opens before navigation
+        setTimeout(() => {
+          window.open(url, '_blank', 'noopener,noreferrer')
+        }, 100)
+      } catch (error) {
+        console.error('Failed to open PiP:', error)
+        // Fallback to normal navigation
+        window.open(url, '_blank', 'noopener,noreferrer')
+      }
+    } else {
+      // Normal navigation for non-in-progress items or unsupported browsers
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  // Handle page unload/navigation for PiP trigger
+  useEffect(() => {
+    if (currentStatus === "in_progress" && isPiPSupported) {
+      const handleBeforeUnload = () => {
+        // Only trigger PiP if we're navigating away from this page
+        if (document.visibilityState === 'visible') {
+          openPiP({
+            id: courseItem.id,
+            title: courseItem.title,
+            courseTitle: courseItem.courses?.title,
+            status: currentStatus as any,
+            progress: currentProgress,
+            courseId: courseItem.courses?.id || "",
+            itemId: courseItem.id
+          }).catch(console.error)
+        }
+      }
+
+      const handleVisibilityChange = () => {
+        // Trigger PiP when page becomes hidden (e.g., switching tabs)
+        if (document.visibilityState === 'hidden' && currentStatus === "in_progress") {
+          openPiP({
+            id: courseItem.id,
+            title: courseItem.title,
+            courseTitle: courseItem.courses?.title,
+            status: currentStatus as any,
+            progress: currentProgress,
+            courseId: courseItem.courses?.id || "",
+            itemId: courseItem.id
+          }).catch(console.error)
+        }
+      }
+
+      window.addEventListener('beforeunload', handleBeforeUnload)
+      document.addEventListener('visibilitychange', handleVisibilityChange)
+
+      return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+      }
+    }
+  }, [currentStatus, currentProgress, isPiPSupported, courseItem, openPiP])
 
   const getItemIcon = (type: string) => {
     switch (type) {
@@ -66,9 +153,7 @@ export function CourseItemDetail({ courseItem }: CourseItemDetailProps) {
     }
   }
 
-  const progress = courseItem.user_progress?.[0]
-  const status = progress?.status || "not_started"
-  const progressPercentage = progress?.progress_percentage || 0
+
 
   return (
     <div className="space-y-6">
@@ -112,22 +197,26 @@ export function CourseItemDetail({ courseItem }: CourseItemDetailProps) {
                 </span>
               )}
               {courseItem.content_url && (
-                <a
-                  href={courseItem.content_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleOpenContent(courseItem.content_url!)}
+                  className="flex items-center gap-1 text-blue-600 hover:text-blue-800 h-auto p-1"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Open Content
-                </a>
+                </Button>
               )}
             </div>
 
-            <ProgressTracker
+            <EnhancedProgressTracker
               courseItemId={courseItem.id}
-              initialStatus={status as any}
-              initialProgress={progressPercentage}
+              courseItemTitle={courseItem.title}
+              courseTitle={courseItem.courses?.title}
+              courseId={courseItem.courses?.id || ""}
+              initialStatus={currentStatus as any}
+              initialProgress={currentProgress}
+              onProgressUpdate={handleProgressUpdate}
             />
           </div>
         </CardContent>
