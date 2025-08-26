@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { SwipeButton } from "@/components/ui/swipe-button"
+import { useConfetti } from "@/hooks/use-confetti"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Circle, Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -74,7 +75,7 @@ export function ProgressTracker({
   }
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2 flex-wrap min-w-0">
       <button
         onClick={() => {
           if (status === "completed") {
@@ -96,16 +97,16 @@ export function ProgressTracker({
       </Badge>
 
       {status === "in_progress" && (
-        <div className="flex gap-1">
-          <Button size="sm" variant="outline" onClick={() => updateProgress("in_progress", 50)} disabled={isLoading}>
-            50%
-          </Button>
-          <Button size="sm" variant="outline" onClick={() => updateProgress("in_progress", 75)} disabled={isLoading}>
-            75%
-          </Button>
-          <Button size="sm" variant="outline" onClick={() => updateProgress("completed", 100)} disabled={isLoading}>
-            Complete
-          </Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <SwipeButton
+            onSwipeComplete={() => {
+              updateProgress("completed", 100)
+              useConfetti(100, 70, { y: 0.6 })
+            }}
+            className="h-9 w-[200px] md:w-[220px]"
+          >
+            Swipe to complete
+          </SwipeButton>
         </div>
       )}
     </div>

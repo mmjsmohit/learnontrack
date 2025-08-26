@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation"
 import { createClient } from "@/lib/supabase/server"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
-import { CourseItemDetail } from "@/components/courses/course-item-detail"
+import { CourseItemWithPiP } from "@/components/courses/course-item-with-pip"
 import { NotesSection } from "@/components/courses/notes-section"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -60,7 +60,7 @@ export default async function CourseItemPage({ params }: CourseItemPageProps) {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <CourseItemDetail courseItem={courseItem} />
+              <CourseItemWithPiP courseItem={courseItem} />
             </div>
             <div className="lg:col-span-1">
               <NotesSection courseItemId={itemId} courseItemType={courseItem.item_type} />

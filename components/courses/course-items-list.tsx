@@ -156,6 +156,7 @@ export function CourseItemsList({ courseItems, courseId }: CourseItemsListProps)
                       initialStatus={status as any}
                       initialProgress={progressPercentage}
                     />
+                    
                   </div>
                 </CardContent>
               </Card>
